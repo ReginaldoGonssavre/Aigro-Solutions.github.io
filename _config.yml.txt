@@ -1,0 +1,18 @@
+title: Aigro Solutions
+description: Meu site Jekyll hospedado no GitHub Pages
+baseurl: "" # Não altere se for usar no GitHub Pages padrão.
+url: ""     # Não altere se for usar no GitHub Pages padrão.
+
+# Configurações de build
+markdown: kramdown
+theme: minima
+
+# Informações do autor (opcional)
+author:
+  name: Reginaldo Gonssavre
+  email: seu-email@exemplo.com
+
+# Plugins (opcional)
+plugins:
+  - jekyll-feed
+  - jekyll-seo-tag
