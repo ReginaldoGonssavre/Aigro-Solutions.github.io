@@ -1,0 +1,429 @@
+# docker-compose.yml - Configuração completa da AigroQuantumSaaS
+version: '3.8'
+
+services:
+  # Aplicação principal
+  app:
+    build: 
+      context: .
+      dockerfile: Dockerfile
+    container_name: aigro-app
+    restart: unless-stopped
+    ports:
+      - "3000:3000"
+    environment:
+      - NODE_ENV=production
+      - DATABASE_URL=postgresql://aigro_user:aigro_secure_password@postgres:5432/aigro_quantum_db
+      - REDIS_URL=redis://redis:6379
+      - JWT_SECRET=${JWT_SECRET}
+      - SMTP_HOST=${SMTP_HOST}
+      - SMTP_PORT=${SMTP_PORT}
+      - SMTP_USER=${SMTP_USER}
+      - SMTP_PASS=${SMTP_PASS}
+    volumes:
+      - ./uploads:/app/uploads
+      - ./logs:/app/logs
+      - ./config:/app/config
+    depends_on:
+      - postgres
+      - redis
+    networks:
+      - aigro-network
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:3000/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+
+  # Banco de dados PostgreSQL
+  postgres:
+    image: postgres:15-alpine
+    container_name: aigro-postgres
+    restart: unless-stopped
+    environment:
+      - POSTGRES_DB=aigro_quantum_db
+      - POSTGRES_USER=aigro_user
+      - POSTGRES_PASSWORD=aigro_secure_password
+      - POSTGRES_INITDB_ARGS="--encoding=UTF-8"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - ./database/init:/docker-entrypoint-initdb.d
+      - ./database/backup:/backup
+    ports:
+      - "5432:5432"
+    networks:
+      - aigro-network
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U aigro_user -d aigro_quantum_db"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+
+  # Redis para cache e sessões
+  redis:
+    image: redis:7-alpine
+    container_name: aigro-redis
+    restart: unless-stopped
+    command: redis-server --appendonly yes --requirepass ${REDIS_PASSWORD}
+    volumes:
+      - redis_data:/data
+      - ./redis/redis.conf:/usr/local/etc/redis/redis.conf
+    ports:
+      - "6379:6379"
+    networks:
+      - aigro-network
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+  # Nginx como proxy reverso
+  nginx:
+    image: nginx:alpine
+    container_name: aigro-nginx
+    restart: unless-stopped
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./nginx/nginx.conf:/etc/nginx/nginx.conf
+      - ./nginx/sites-available:/etc/nginx/sites-available
+      - ./nginx/sites-enabled:/etc/nginx/sites-enabled
+      - ./nginx/ssl:/etc/nginx/ssl
+      - ./static:/var/www/static
+      - ./uploads:/var/www/uploads
+      - certbot_webroot:/var/www/certbot
+      - certbot_certs:/etc/letsencrypt
+    depends_on:
+      - app
+    networks:
+      - aigro-network
+    healthcheck:
+      test: ["CMD", "nginx", "-t"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+  # Certbot para SSL automático
+  certbot:
+    image: certbot/certbot
+    container_name: aigro-certbot
+    volumes:
+      - certbot_certs:/etc/letsencrypt
+      - certbot_webroot:/var/www/certbot
+    command: certonly --webroot --webroot-path=/var/www/certbot --email admin@yourdomain.com --agree-tos --no-eff-email -d yourdomain.com -d www.yourdomain.com
+    depends_on:
+      - nginx
+    networks:
+      - aigro-network
+
+  # Monitoramento com Prometheus
+  prometheus:
+    image: prom/prometheus:latest
+    container_name: aigro-prometheus
+    restart: unless-stopped
+    ports:
+      - "9090:9090"
+    volumes:
+      - ./monitoring/prometheus.yml:/etc/prometheus/prometheus.yml
+      - prometheus_data:/prometheus
+    command:
+      - '--config.file=/etc/prometheus/prometheus.yml'
+      - '--storage.tsdb.path=/prometheus'
+      - '--web.console.libraries=/etc/prometheus/console_libraries'
+      - '--web.console.templates=/etc/prometheus/consoles'
+      - '--web.enable-lifecycle'
+    networks:
+      - aigro-network
+
+  # Grafana para visualização
+  grafana:
+    image: grafana/grafana:latest
+    container_name: aigro-grafana
+    restart: unless-stopped
+    ports:
+      - "3001:3000"
+    environment:
+      - GF_SECURITY_ADMIN_PASSWORD=admin123
+      - GF_INSTALL_PLUGINS=grafana-piechart-panel
+    volumes:
+      - grafana_data:/var/lib/grafana
+      - ./monitoring/grafana/provisioning:/etc/grafana/provisioning
+    networks:
+      - aigro-network
+
+  # Elasticsearch para logs
+  elasticsearch:
+    image: docker.elastic.co/elasticsearch/elasticsearch:8.8.0
+    container_name: aigro-elasticsearch
+    restart: unless-stopped
+    environment:
+      - discovery.type=single-node
+      - xpack.security.enabled=false
+      - "ES_JAVA_OPTS=-Xms512m -Xmx512m"
+    volumes:
+      - elasticsearch_data:/usr/share/elasticsearch/data
+    ports:
+      - "9200:9200"
+    networks:
+      - aigro-network
+
+  # Kibana para visualização de logs
+  kibana:
+    image: docker.elastic.co/kibana/kibana:8.8.0
+    container_name: aigro-kibana
+    restart: unless-stopped
+    ports:
+      - "5601:5601"
+    environment:
+      - ELASTICSEARCH_HOSTS=http://elasticsearch:9200
+    depends_on:
+      - elasticsearch
+    networks:
+      - aigro-network
+
+  # Backup automático
+  backup:
+    build:
+      context: ./docker/backup
+      dockerfile: Dockerfile
+    container_name: aigro-backup
+    restart: unless-stopped
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - ./uploads:/app/uploads
+      - ./backups:/backups
+      - /var/run/docker.sock:/var/run/docker.sock
+    environment:
+      - BACKUP_SCHEDULE=0 2 * * *
+      - POSTGRES_HOST=postgres
+      - POSTGRES_DB=aigro_quantum_db
+      - POSTGRES_USER=aigro_user
+      - POSTGRES_PASSWORD=aigro_secure_password
+    depends_on:
+      - postgres
+    networks:
+      - aigro-network
+
+  # Worker para processamento de tarefas
+  worker:
+    build: 
+      context: .
+      dockerfile: Dockerfile.worker
+    container_name: aigro-worker
+    restart: unless-stopped
+    environment:
+      - NODE_ENV=production
+      - DATABASE_URL=postgresql://aigro_user:aigro_secure_password@postgres:5432/aigro_quantum_db
+      - REDIS_URL=redis://redis:6379
+    volumes:
+      - ./uploads:/app/uploads
+      - ./logs:/app/logs
+    depends_on:
+      - postgres
+      - redis
+    networks:
+      - aigro-network
+
+volumes:
+  postgres_data:
+    driver: local
+  redis_data:
+    driver: local
+  prometheus_data:
+    driver: local
+  grafana_data:
+    driver: local
+  elasticsearch_data:
+    driver: local
+  certbot_certs:
+    driver: local
+  certbot_webroot:
+    driver: local
+
+networks:
+  aigro-network:
+    driver: bridge
+    ipam:
+      config:
+        - subnet: 172.20.0.0/16
+
+---
+
+# Dockerfile - Aplicação principal
+FROM node:18-alpine AS builder
+
+WORKDIR /app
+
+# Instalar dependências
+COPY package*.json ./
+RUN npm ci --only=production && npm cache clean --force
+
+# Copiar código
+COPY . .
+
+# Build da aplicação
+RUN npm run build
+
+# Imagem final
+FROM node:18-alpine
+
+# Criar usuário não-root
+RUN addgroup -g 1001 -S nodejs
+RUN adduser -S nextjs -u 1001
+
+WORKDIR /app
+
+# Instalar dependências de sistema
+RUN apk add --no-cache \
+    curl \
+    postgresql-client \
+    redis \
+    && rm -rf /var/cache/apk/*
+
+# Copiar arquivos da aplicação
+COPY --from=builder --chown=nextjs:nodejs /app/node_modules ./node_modules
+COPY --from=builder --chown=nextjs:nodejs /app/dist ./dist
+COPY --from=builder --chown=nextjs:nodejs /app/package.json ./package.json
+
+# Criar diretórios necessários
+RUN mkdir -p /app/uploads /app/logs && \
+    chown -R nextjs:nodejs /app
+
+USER nextjs
+
+EXPOSE 3000
+
+# Health check
+HEALTHCHECK --interval=30s --timeout=10s --start-period=40s --retries=3 \
+  CMD curl -f http://localhost:3000/health || exit 1
+
+CMD ["node", "dist/app.js"]
+
+---
+
+# Dockerfile.worker - Worker para processamento
+FROM node:18-alpine
+
+WORKDIR /app
+
+# Instalar dependências de sistema
+RUN apk add --no-cache \
+    curl \
+    postgresql-client \
+    redis \
+    && rm -rf /var/cache/apk/*
+
+# Copiar arquivos
+COPY package*.json ./
+RUN npm ci --only=production && npm cache clean --force
+
+COPY . .
+
+# Criar usuário não-root
+RUN addgroup -g 1001 -S nodejs && \
+    adduser -S worker -u 1001 && \
+    chown -R worker:nodejs /app
+
+USER worker
+
+CMD ["node", "worker.js"]
+
+---
+
+# .dockerignore
+node_modules
+npm-debug.log
+.git
+.gitignore
+README.md
+.env
+.nyc_output
+coverage
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+.DS_Store
+*.log
+logs
+*.pid
+*.seed
+*.pid.lock
+lib-cov
+coverage
+.nyc_output
+.grunt
+bower_components
+.lock-wscript
+build/Release
+node_modules/
+jspm_packages/
+typings/
+.npm
+.eslintcache
+.node_repl_history
+*.tgz
+.yarn-integrity
+.env
+.vscode
+.idea
+
+---
+
+# docker-compose.dev.yml - Ambiente de desenvolvimento
+version: '3.8'
+
+services:
+  app:
+    build: 
+      context: .
+      dockerfile: Dockerfile.dev
+    container_name: aigro-app-dev
+    ports:
+      - "3000:3000"
+      - "9229:9229" # Debug port
+    environment:
+      - NODE_ENV=development
+      - DATABASE_URL=postgresql://aigro_user:aigro_pass@postgres:5432/aigro_dev
+      - REDIS_URL=redis://redis:6379
+    volumes:
+      - .:/app
+      - /app/node_modules
+    depends_on:
+      - postgres
+      - redis
+    networks:
+      - aigro-dev-network
+    command: npm run dev
+
+  postgres:
+    image: postgres:15-alpine
+    container_name: aigro-postgres-dev
+    environment:
+      - POSTGRES_DB=aigro_dev
+      - POSTGRES_USER=aigro_user
+      - POSTGRES_PASSWORD=aigro_pass
+    volumes:
+      - postgres_dev_data:/var/lib/postgresql/data
+    ports:
+      - "5433:5432"
+    networks:
+      - aigro-dev-network
+
+  redis:
+    image: redis:7-alpine
+    container_name: aigro-redis-dev
+    ports:
+      - "6380:6379"
+    networks:
+      - aigro-dev-network
+
+  mailhog:
+    image: mailhog/mailhog
+    container_name: aigro-mailhog
+    ports:
+      - "1025:1025"
+      - "

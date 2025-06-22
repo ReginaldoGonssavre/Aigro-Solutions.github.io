@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>AigroQuantumSaaS - Plataforma Híbrida Quântica</title>
+  <meta name="description" content="Impulsionando o futuro com software híbrido quântico. Plataforma SaaS para tecnologia, inovação e cibersegurança.">
+  <link rel="stylesheet" href="assets/styles.css"/>
+  <link rel="icon" type="image/png" href="assets/logo.png"/>
+</head>
+<body>
+  <div class="galaxy-bg">
+    <img src="assets/bg1.jpg" class="bg-main" alt="Fundo galáxia"/>
+    <div class="galaxy-flash"></div>
+  </div>
+  <header>
+    <img src="assets/logo.png" class="logo" alt="AigroQuantumSaaS Logo"/>
+    <nav>
+      <a href="#produtos">Produtos</a>
+      <a href="#ciber">Cibersegurança IA</a>
+      <a href="#precos">Preços</a>
+      <a href="#download">Download</a>
+      <a href="#login" class="btn-header">Login</a>
+    </nav>
+  </header>
+  <main>
+    <section class="hero">
+      <img src="assets/banner1.jpg" class="hero-img" alt="Banner Hero"/>
+      <div class="hero-titles">
+        <h1>AigroQuantumSaaS</h1>
+        <p>Impulsionando o futuro com software híbrido quântico</p>
+        <a href="#download" class="btn-main">Download QuantumDoor OS</a>
+      </div>
+    </section>
+    <section id="produtos" class="produtos">
+      <h2>Softwares & Soluções</h2>
+      <div class="produtos-grid">
+        <div class="produto-card">
+          <img src="assets/quantumdoor.png" alt="QuantumDoor OS"/>
+          <h3>QuantumDoor OS Next</h3>
+          <p>Sistema operacional híbrido para ambientes quânticos e clássicos, preparado para o futuro da computação segura.</p>
+          <a href="#download" class="btn-produto">Download</a>
+        </div>
+      </div>
+    </section>
+    <section id="ciber" class="sobre">
+      <h2>Hypervisor IA de Cibersegurança</h2>
+      <p>
+        Nossa plataforma conta com uma camada raiz de IA focada em cibersegurança, monitorando, prevenindo e reagindo a ameaças em tempo real.<br>
+        <span class="badge-lab">Em evolução contínua</span>
+      </p>
+      <p>
+        <strong>Pronto para APIs e integrações de threat detection, SOC, SIEM e monitoramento de compliance.</strong>
+      </p>
+    </section>
+    <section id="precos" class="precos">
+      <h2>Planos e Preços</h2>
+      <div class="planos-grid">
+        <div class="plano-card">
+          <h3>Starter</h3>
+          <p>Ideal para testes e uso pessoal.</p>
+          <div class="preco">Grátis*</div>
+          <ul>
+            <li>1 download gratuito</li>
+            <li>Suporte básico</li>
+          </ul>
+          <a href="#login" class="btn-plano">Começar</a>
+        </div>
+        <div class="plano-card">
+          <h3>Pro</h3>
+          <p>Para empresas e power users.</p>
+          <div class="preco">R$ 129/mês</div>
+          <ul>
+            <li>Downloads ilimitados</li>
+            <li>Suporte prioritário</li>
+            <li>Acesso antecipado a novidades</li>
+          </ul>
+          <a href="#login" class="btn-plano">Assinar</a>
+        </div>
+      </div>
+      <p class="info">Aceitamos pagamentos via Stripe, PayPal, Mercado Pago. Após a compra, o download é liberado automaticamente.</p>
+    </section>
+    <section id="download" class="download">
+      <h2>Download & Login</h2>
+      <div class="download-area">
+        <a href="downloads/quantumdoor-os-v1.zip" class="btn-download">Baixar QuantumDoor OS</a>
+        <a href="#login" class="btn-login">Entrar / Registrar</a>
+        <p class="info">*Área de download segura, disponível para usuários registrados.</p>
+      </div>
+      <div class="login-area" id="login">
+        <h3>Acesso do Usuário</h3>
+        <form id="login-form">
+          <label for="email">Email:</label>
+          <input type="email" id="email" placeholder="Seu email" required>
+          <label for="senha">Senha:</label>
+          <input type="password" id="senha" placeholder="Senha" required>
+          <button class="btn-login-form" type="submit">Entrar</button>
+          <p class="cadastro-link">Novo por aqui? <a href="#">Crie sua conta</a></p>
+        </form>
+        <div id="login-msg"></div>
+      </div>
+    </section>
+    <section id="faq" class="faq">
+      <h2>Dúvidas Frequentes</h2>
+      <details>
+        <summary>Como funciona a autenticação?</summary>
+        <p>Usamos integração com provedores seguros (Firebase/Auth0). Você cria sua conta com email e senha, e pode acessar downloads exclusivos.</p>
+      </details>
+      <details>
+        <summary>Como faço download após o pagamento?</summary>
+        <p>Após o pagamento, o sistema libera automaticamente os links de download para o seu usuário.</p>
+      </details>
+      <details>
+        <summary>Como proteger meu ambiente?</summary>
+        <p>Nosso Hypervisor IA está em evolução e garante monitoramento contínuo da plataforma e arquivos baixados.</p>
+      </details>
+    </section>
+    <section id="contato" class="contato">
+      <h2>Contato</h2>
+      <form id="contato-form">
+        <input type="text" placeholder="Seu nome" required>
+        <input type="email" placeholder="Seu email" required>
+        <textarea placeholder="Mensagem" required></textarea>
+        <button type="submit" class="btn-main">Enviar</button>
+      </form>
+    </section>
+  </main>
+  <footer>
+    <span>AigroQuantumSaaS &copy; 2025</span>
+    <span class="footer-links">
+      <a href="#termos">Termos</a> | 
+      <a href="#privacidade">Privacidade</a>
+    </span>
+  </footer>
+  <script src="assets/main.js"></script>
+</body>
+</html>
