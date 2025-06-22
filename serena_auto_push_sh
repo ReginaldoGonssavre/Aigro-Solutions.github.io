@@ -1,0 +1,29 @@
+#!/bin/bash
+
+echo "🔐 Iniciando agente SSH da Serena..."
+eval "$(ssh-agent -s)"
+ssh-add ~/.ssh/id_ed25519
+
+REPO_URL="git@github.com:Aigro-Solutions/Aigro-Solutions.github.io.git"
+FOLDER="Aigro-Solutions.github.io"
+
+echo "📁 Limpando pasta anterior (se existir)..."
+rm -rf $FOLDER
+
+echo "📥 Clonando repositório da AgroNovaTech..."
+git clone "$REPO_URL"
+cd $FOLDER
+
+echo "🤖 Executando Serena IA..."
+python ai/serena_core.py
+
+echo "✅ Preparando commit..."
+git config user.name "Serena"
+git config user.email "serena.agronovatech@gmail.com"
+git add .
+git commit -m "🤖 Correções automáticas aplicadas por Serena IA" || echo "Sem alterações para commitar."
+
+echo "🚀 Enviando para GitHub..."
+git push origin main
+
+echo "🏁 Processo completo. Serena finalizou as correções e enviou com sucesso!"
