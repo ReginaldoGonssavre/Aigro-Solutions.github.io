@@ -1,0 +1,32 @@
+name: Orientar Revisores
+
+on:
+  pull_request:
+    types: [opened]
+
+jobs:
+  comment:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Comentar instruções para os revisores
+        uses: actions/github-script@v7
+        with:
+          script: |
+            github.rest.issues.createComment({
+              issue_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              body: `
+Olá, @TechLeadUsername e @SerenaUsername!  
+Vocês foram automaticamente designados como revisores deste Pull Request.
+
+**Tarefas:**
+- Revisar o código proposto.
+- Deixar comentários, sugestões ou aprovar.
+- Realizar o merge caso tudo esteja correto.
+
+Se precisarem de ajuda, consultem a documentação interna ou entrem em contato com o responsável pelo repositório.
+
+Obrigado!
+              `
+            })
