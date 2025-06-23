@@ -1,0 +1,18 @@
+# Exemplo de runbook para automação AIOps - Nível 3 (AUTOMATION)
+on_alert:
+  - name: "Restart Quantum Job"
+    condition: "quantum_status == 'error'"
+    actions:
+      - type: "restart_job"
+        target: "quantum"
+  - name: "Notify SRE"
+    condition: "classical_status == 'down'"
+    actions:
+      - type: "send_message"
+        channel: "teams"
+        message: "Classical service is down. Incident opened."
+  - name: "Self-healing Script"
+    condition: "anomaly_detected == True"
+    actions:
+      - type: "run_script"
+        script: "scripts/self_healing.sh"
