@@ -1,0 +1,1 @@
+# Frontend base para HealthTech Quantum (React Native, componentes dedicados).

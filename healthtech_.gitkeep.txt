@@ -1,0 +1,3 @@
+# Diretório base do ecossistema HealthTech Quantum-Ready.
+# Estrutura inicial para backend, frontend, data science, docs e pipelines.
+# Modular, escalável e preparado para integração com a stack do AigroQuantumSaaS.

@@ -1,0 +1,1 @@
+# Backend base para HealthTech Quantum (FastAPI, módulos desacoplados).
