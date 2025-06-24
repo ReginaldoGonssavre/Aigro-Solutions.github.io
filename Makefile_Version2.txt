@@ -1,0 +1,38 @@
+.PHONY: setup install build test deploy backup monitor dev prod logs clean
+
+setup:
+	@echo "🔧 Configurando ambiente AigroQuantumSaaS..."
+	npm install
+	cp .env.example .env
+	docker-compose up -d db redis
+
+install:
+	npm install
+
+build:
+	npm run build
+
+test:
+	bash infraestrutura_aigro_quantumsaas.sh test
+
+deploy:
+	bash infraestrutura_aigro_quantumsaas.sh deploy
+
+backup:
+	bash infraestrutura_aigro_quantumsaas.sh backup
+
+monitor:
+	bash infraestrutura_aigro_quantumsaas.sh monitor
+
+dev:
+	docker-compose up
+
+prod:
+	docker-compose -f docker-compose.prod.yml up -d
+
+logs:
+	docker-compose logs -f
+
+clean:
+	docker-compose down -v
+	docker system prune -f
