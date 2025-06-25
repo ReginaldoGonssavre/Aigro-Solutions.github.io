@@ -1,30 +1,27 @@
-# AigroQuantumSaaS
+# A2A Docs
 
-Plataforma SaaS para IA e computação quântica.
+## Published A2A docs
 
-## Backend
+[`https://a2aproject.github.io/A2A`](https://a2aproject.github.io/A2A)
 
-- Python 3.11
-- FastAPI
-- SQLAlchemy
-- JWT Auth
-- Qiskit (Quantum)
+## Developing A2A docs
 
-## Frontend
+1. Clone this repository and `cd` into the repository directory
+2. Run `pip install -r requirements-docs.txt`
+3. Run `mkdocs serve`, edit `.md` files, and live preview
+4. Contribute docs changes as usual
 
-- ReactJS (create-react-app)
+## How it works
 
-## Deploy local
-
-1. Instale Docker e docker-compose
-2. `docker-compose up --build`
-3. Backend: http://localhost:8000  
-   Frontend: http://localhost:5173
-
-## CI
-
-- Automatizado com GitHub Actions
-
-## Testes
-
-- Adapte e acrescente testes em `backend/tests/`
+- The A2A docs use [mkdocs](https://www.mkdocs.org/) and the
+  [mkdocs-material theme](https://squidfunk.github.io/mkdocs-material/)
+- All of the source documentation / Markdown files related to the A2A docs are
+  in the `docs/` directory in the A2A repository
+- `mkdocs.yml` in the repository root contains all of the docs config, including
+  the site navigation and organization
+- There is a GitHub Action in `.github/workflows/docs.yml` that builds and
+  publishes the docs and pushes the built assets to the `gh-pages` branch in
+  this repository using `mkdocs gh-deploy --force`. This happens automatically for all
+  commits / merges to `main`.
+- The A2A documentation is hosted in GitHub pages, and the settings for this are
+  in the A2A repository settings in GitHub.
