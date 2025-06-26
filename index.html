@@ -3,7 +3,11 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Hello, World!</title>
+  <title>Aigro Quantum SaaS</title>
+  <link rel="manifest" href="/manifest.json">
+  <meta name="theme-color" content="#000000"/>
+  <link rel="apple-touch-icon" href="/logo192.png" />
+  <link rel="icon" href="/favicon.ico" />
   <style>
     body {
       font-family: Arial, sans-serif;
@@ -19,7 +23,20 @@
   </style>
 </head>
 <body>
-  <h1>Hello, World!</h1>
-  <p>Seja bem-vindo ao GitHub Pages 🚀</p>
+  <noscript>You need to enable JavaScript to run this app.</noscript>
+  <div id="root"></div>
+  <script>
+    if ('serviceWorker' in navigator) {
+      window.addEventListener('load', () => {
+        navigator.serviceWorker.register('/service-worker.js')
+          .then(registration => {
+            console.log('SW registered: ', registration);
+          })
+          .catch(registrationError => {
+            console.log('SW registration failed: ', registrationError);
+          });
+      });
+    }
+  </script>
 </body>
 </html>
