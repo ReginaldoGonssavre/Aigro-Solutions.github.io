@@ -1,0 +1,24 @@
+name: CI/CD Pipeline
+
+on:
+  push:
+    branches:
+      - AigroQuantumSaas
+
+jobs:
+  build-backend:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+
+    - name: Build Docker images
+      run: docker-compose build
+
+    # Future steps will include:
+    # - Run backend tests
+    # - Build frontend
+    # - Run frontend tests
+    # - Deploy to Vercel (frontend)
+    # - Deploy backend (if not serverless on Vercel)
