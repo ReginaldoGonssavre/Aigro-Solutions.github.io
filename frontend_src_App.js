@@ -9,38 +9,57 @@ function App() {
     e.preventDefault();
     const username = e.target.username.value;
     const password = e.target.password.value;
-    const res = await fetch('/api/register', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ username, password })
-    });
-    setMsg((await res.json()).msg || 'Erro');
+    try {
+      const res = await fetch('http://localhost:8000/auth/register', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ username, password })
+      });
+      const data = await res.json();
+      if (res.ok) {
+        setToken(data.access_token);
+        setMsg('Registro e Login bem-sucedidos!');
+      } else {
+        setMsg(data.detail || 'Erro no registro');
+      }
+    } catch (error) {
+      setMsg('Erro de conexão com o backend.');
+    }
   }
 
   async function login(e) {
     e.preventDefault();
     const username = e.target.username.value;
     const password = e.target.password.value;
-    const res = await fetch('/api/login', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ username, password })
-    });
-    const data = await res.json();
-    if (data.access_token) {
-      setToken(data.access_token);
-      setMsg('Login ok');
-    } else {
-      setMsg('Erro login');
+    try {
+      const form_data = new URLSearchParams();
+      form_data.append('username', username);
+      form_data.append('password', password);
+
+      const res = await fetch('http://localhost:8000/auth/token', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+        body: form_data.toString()
+      });
+      const data = await res.json();
+      if (res.ok) {
+        setToken(data.access_token);
+        setMsg('Login bem-sucedido!');
+      } else {
+        setMsg(data.detail || 'Erro no login');
+      }
+    } catch (error) {
+      setMsg('Erro de conexão com o backend.');
     }
   }
 
-  async function getMe() {
-    const res = await fetch('/api/users/me', {
-      headers: { Authorization: `Bearer ${token}` }
-    });
-    setUser(await res.json());
-  }
+  // Removendo getMe por enquanto, será implementado um endpoint protegido no backend
+  // async function getMe() {
+  //   const res = await fetch('http://localhost:8000/users/me', {
+  //     headers: { Authorization: `Bearer ${token}` }
+  //   });
+  //   setUser(await res.json());
+  // }
 
   async function quantum() {
     // Chamando o novo endpoint de número aleatório quântico
