@@ -1,6 +1,13 @@
 fastapi
 uvicorn
 pydantic
+# Database
+psycopg2-binary
+SQLAlchemy
+alembic
+# Security
+python-jose[cryptography]
+passlib[bcrypt]
 # Data Science
 pandas
 scikit-learn
@@ -9,4 +16,3 @@ qiskit
 pennylane
 # Optional: for async tasks and security
 httpx
-cryptography

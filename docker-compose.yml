@@ -7,4 +7,20 @@ services:
       - "8000:8000"
     volumes:
       - .:/app
+    environment:
+      DATABASE_URL: postgresql://user:password@db:5432/aigroquantumsaas_db
+    depends_on:
+      - db
     command: uvicorn backend_app_main_Version2:app --host 0.0.0.0 --port 8000
+
+  db:
+    image: postgres:13
+    volumes:
+      - postgres_data:/var/lib/postgresql/data/
+    environment:
+      POSTGRES_DB: aigroquantumsaas_db
+      POSTGRES_USER: user
+      POSTGRES_PASSWORD: password
+
+volumes:
+  postgres_data:
