@@ -43,13 +43,13 @@ function App() {
   }
 
   async function quantum() {
-    const prompt = window.prompt("Prompt para quantum (ex: superposição)?", "superposição");
-    const res = await fetch('/api/ia', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` },
-      body: JSON.stringify({ module: 'quantum', prompt })
+    // Chamando o novo endpoint de número aleatório quântico
+    const res = await fetch('http://localhost:8000/quantum/random-number', {
+      method: 'GET',
+      headers: { 'Content-Type': 'application/json' }
     });
-    setMsg(JSON.stringify(await res.json(), null, 2));
+    const data = await res.json();
+    setMsg(JSON.stringify(data, null, 2));
   }
 
   return (
