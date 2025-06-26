@@ -1,9 +1,18 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 
 function App() {
   const [token, setToken] = useState('');
   const [msg, setMsg] = useState('');
   const [user, setUser] = useState(null);
+
+  // Efeito para buscar dados do usuário quando o token muda
+  useEffect(() => {
+    if (token) {
+      getMe();
+    } else {
+      setUser(null);
+    }
+  }, [token]);
 
   async function register(e) {
     e.preventDefault();
@@ -53,13 +62,23 @@ function App() {
     }
   }
 
-  // Removendo getMe por enquanto, será implementado um endpoint protegido no backend
-  // async function getMe() {
-  //   const res = await fetch('http://localhost:8000/users/me', {
-  //     headers: { Authorization: `Bearer ${token}` }
-  //   });
-  //   setUser(await res.json());
-  // }
+  async function getMe() {
+    try {
+      const res = await fetch('http://localhost:8000/auth/users/me', {
+        headers: { Authorization: `Bearer ${token}` }
+      });
+      const data = await res.json();
+      if (res.ok) {
+        setUser(data);
+      } else {
+        setMsg(data.detail || 'Erro ao obter dados do usuário');
+        setUser(null);
+      }
+    } catch (error) {
+      setMsg('Erro de conexão ao obter dados do usuário.');
+      setUser(null);
+    }
+  }
 
   async function quantum() {
     // Chamando o novo endpoint de número aleatório quântico
@@ -97,6 +116,12 @@ function App() {
         <input name="password" type="password" placeholder="Senha" />
         <button type="submit">Entrar</button>
       </form>
+      {user && (
+        <div>
+          <h3>Bem-vindo, {user.username}!</h3>
+          <p>Tipo de Licença: {user.license_type}</p>
+        </div>
+      )}
       <button onClick={getMe} disabled={!token}>Meus Dados</button>
       <button onClick={quantum} disabled={!token}>Quantum Job</button>
       <pre>{msg}</pre>
