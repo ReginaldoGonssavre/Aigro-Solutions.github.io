@@ -3,7 +3,7 @@ name: CI/CD Pipeline
 on:
   push:
     branches:
-      - AigroQuantumSaas
+      - main # Changed from AigroQuantumSaas to main
 
 jobs:
   build-backend:
@@ -12,6 +12,21 @@ jobs:
     steps:
     - name: Checkout code
       uses: actions/checkout@v4
+
+    - name: Set up Python
+      uses: actions/setup-python@v5
+      with:
+        python-version: '3.9' # Use Python 3.9, matching Dockerfile
+
+    - name: Install backend dependencies
+      run: pip install -r backend_requirements.txt
+      working-directory: ./ # Run from root of repo
+
+    - name: Run Alembic migrations
+      run: alembic upgrade head
+      working-directory: ./ # Run from root of repo
+      env:
+        DATABASE_URL: postgresql://user:password@localhost:5432/aigroquantumsaas_db # Use localhost for migrations in CI
 
     - name: Build Docker images
       run: docker-compose build
