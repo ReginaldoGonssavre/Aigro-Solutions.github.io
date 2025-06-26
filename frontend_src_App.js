@@ -63,12 +63,23 @@ function App() {
 
   async function quantum() {
     // Chamando o novo endpoint de número aleatório quântico
-    const res = await fetch('http://localhost:8000/quantum/random-number', {
-      method: 'GET',
-      headers: { 'Content-Type': 'application/json' }
-    });
-    const data = await res.json();
-    setMsg(JSON.stringify(data, null, 2));
+    try {
+      const res = await fetch('http://localhost:8000/quantum/random-number', {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}` // Incluindo o token de autenticação
+        }
+      });
+      const data = await res.json();
+      if (res.ok) {
+        setMsg(JSON.stringify(data, null, 2));
+      } else {
+        setMsg(data.detail || 'Erro ao acessar endpoint quântico');
+      }
+    } catch (error) {
+      setMsg('Erro de conexão com o backend.');
+    }
   }
 
   return (
