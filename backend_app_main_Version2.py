@@ -2,6 +2,7 @@ from fastapi import FastAPI
 from app.api.endpoints import monitoramento, telemedicina, saude_preventiva, quantum, auth
 from app.database import engine, Base
 from app.models.user import User
+from app.models.license import License # Importe o modelo de licença
 
 Base.metadata.create_all(bind=engine)
 
