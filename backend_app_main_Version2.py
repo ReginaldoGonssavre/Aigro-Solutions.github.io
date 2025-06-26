@@ -1,5 +1,9 @@
 from fastapi import FastAPI
 from app.api.endpoints import monitoramento, telemedicina, saude_preventiva, quantum, auth
+from app.database import engine, Base
+from app.models.user import User
+
+Base.metadata.create_all(bind=engine)
 
 app = FastAPI(
     title="HealthTech Quantum API"
