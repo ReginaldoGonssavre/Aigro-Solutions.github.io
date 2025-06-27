@@ -2,6 +2,85 @@ import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import './i18n'; // Import the i18n configuration
 
+// Componentes para organizar o layout
+const Header = ({ changeLanguage, t }) => (
+  <header>
+    <h1>{t('welcome_title')}</h1>
+    <div className="language-selector">
+      <button onClick={() => changeLanguage('pt')}>Português</button>
+      <button onClick={() => changeLanguage('en')}>English</button>
+    </div>
+  </header>
+);
+
+const HeroSection = ({ handleLearnMoreClick, t }) => (
+  <section className="hero">
+    <p>{t('welcome_subtitle')}</p>
+    <button onClick={handleLearnMoreClick}>{t('learn_more')}</button>
+  </section>
+);
+
+const FeaturesSection = ({ t }) => (
+  <section className="features">
+    <h2>{t('our_features')}</h2>
+    <div className="feature-grid">
+      <div className="feature-item">
+        <h3>{t('quantum_optimization_title')}</h3>
+        <p>{t('quantum_optimization_description')}</p>
+      </div>
+      <div className="feature-item">
+        <h3>{t('hybrid_data_analysis_title')}</h3>
+        <p>{t('hybrid_data_analysis_description')}</p>
+      </div>
+    </div>
+  </section>
+);
+
+const ImageUploadSection = ({ handleFileChange, handleUpload, selectedFile, uploadStatus, t }) => (
+  <section className="upload-section">
+    <h2>{t('image_upload_title')}</h2>
+    <input type="file" onChange={handleFileChange} accept="image/*" />
+    <button onClick={handleUpload}>{t('upload_button')}</button>
+    <p>{uploadStatus}</p>
+    <p><em>{t('upload_note')}</em></p>
+  </section>
+);
+
+const AboutSection = ({ t }) => (
+  <section id="about-section">
+    <h2>{t('about_title')}</h2>
+    <p>{t('about_description')}</p>
+  </section>
+);
+
+const AuthSection = ({ register, login, getMe, quantum, token, msg, user, t }) => (
+  <section className="auth-section">
+    <h1>AigroQuantumSaaS Frontend</h1>
+    <form onSubmit={register}>
+      <h2>Registrar</h2>
+      <input name="username" placeholder="Usuário" />
+      <input name="password" type="password" placeholder="Senha" />
+      <button type="submit">Registrar</button>
+    </form>
+    <form onSubmit={login}>
+      <h2>Login</h2>
+      <input name="username" placeholder="Usuário" />
+      <input name="password" type="password" placeholder="Senha" />
+      <button type="submit">Entrar</button>
+    </form>
+    <button onClick={getMe} disabled={!token}>Meus Dados</button>
+    <button onClick={quantum} disabled={!token}>Quantum Job</button>
+    <pre>{msg}</pre>
+    {user && <pre>{JSON.stringify(user, null, 2)}</pre>}
+  </section>
+);
+
+const Footer = ({ t }) => (
+  <footer>
+    <p>&copy; 2024 Aigro Quantum SaaS. {t('all_rights_reserved')}</p>
+  </footer>
+);
+
 function App() {
   const { t, i18n } = useTranslation();
   const [token, setToken] = useState('');
@@ -29,23 +108,6 @@ function App() {
   const handleUpload = () => {
     if (selectedFile) {
       setUploadStatus(t('file_selected', { fileName: selectedFile.name, fileSize: (selectedFile.size / 1024).toFixed(2) }));
-      // In a real application, you would send the file to a backend here.
-      // For example, using FormData and fetch API:
-      // const formData = new FormData();
-      // formData.append('image', selectedFile);
-      // fetch('/upload-endpoint', {
-      //     method: 'POST',
-      //     body: formData
-      // })
-      // .then(response => response.json())
-      // .then(data => {
-      //     setUploadStatus('Upload completed!');
-      //     console.log(data);
-      // })
-      // .catch(error => {
-      //     setUploadStatus('Upload failed.');
-      //     console.error('Error:', error);
-      // });
     } else {
       setUploadStatus(t('no_file_selected'));
     }
@@ -100,68 +162,30 @@ function App() {
 
   return (
     <div>
-      <header>
-        <h1>{t('welcome_title')}</h1>
-        <div>
-          <button onClick={() => changeLanguage('pt')}>Português</button>
-          <button onClick={() => changeLanguage('en')}>English</button>
-        </div>
-      </header>
+      <Header changeLanguage={changeLanguage} t={t} />
       <main>
-        <section className="hero">
-          <p>{t('welcome_subtitle')}</p>
-          <button onClick={handleLearnMoreClick}>{t('learn_more')}</button>
-        </section>
-
-        <section className="features">
-          <h2>{t('our_features')}</h2>
-          <div className="feature-item">
-            <h3>{t('quantum_optimization_title')}</h3>
-            <p>{t('quantum_optimization_description')}</p>
-          </div>
-          <div className="feature-item">
-            <h3>{t('hybrid_data_analysis_title')}</h3>
-            <p>{t('hybrid_data_analysis_description')}</p>
-          </div>
-        </section>
-
-        <section className="upload-section">
-          <h2>{t('image_upload_title')}</h2>
-          <input type="file" onChange={handleFileChange} accept="image/*" />
-          <button onClick={handleUpload}>{t('upload_button')}</button>
-          <p>{uploadStatus}</p>
-          <p><em>{t('upload_note')}</em></p>
-        </section>
-
-        <section id="about-section" style={{ padding: '20px', marginTop: '50px', borderTop: '1px solid #eee' }}>
-          <h2>{t('about_title')}</h2>
-          <p>{t('about_description')}</p>
-        </section>
-
-        {/* Existing authentication and quantum job sections */}
-        <div>
-          <h1>AigroQuantumSaaS Frontend</h1>
-          <form onSubmit={register}>
-            <h2>Registrar</h2>
-            <input name="username" placeholder="Usuário" />
-            <input name="password" type="password" placeholder="Senha" />
-            <button type="submit">Registrar</button>
-          </form>
-          <form onSubmit={login}>
-            <h2>Login</h2>
-            <input name="username" placeholder="Usuário" />
-            <input name="password" type="password" placeholder="Senha" />
-            <button type="submit">Entrar</button>
-          </form>
-          <button onClick={getMe} disabled={!token}>Meus Dados</button>
-          <button onClick={quantum} disabled={!token}>Quantum Job</button>
-          <pre>{msg}</pre>
-          {user && <pre>{JSON.stringify(user, null, 2)}</pre>}
-        </div>
+        <HeroSection handleLearnMoreClick={handleLearnMoreClick} t={t} />
+        <FeaturesSection t={t} />
+        <ImageUploadSection 
+          handleFileChange={handleFileChange}
+          handleUpload={handleUpload}
+          selectedFile={selectedFile}
+          uploadStatus={uploadStatus}
+          t={t}
+        />
+        <AboutSection t={t} />
+        <AuthSection 
+          register={register}
+          login={login}
+          getMe={getMe}
+          quantum={quantum}
+          token={token}
+          msg={msg}
+          user={user}
+          t={t}
+        />
       </main>
-      <footer>
-        <p>&copy; 2024 Aigro Quantum SaaS. {t('all_rights_reserved')}</p>
-      </footer>
+      <Footer t={t} />
     </div>
   );
 }
