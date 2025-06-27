@@ -136,9 +136,23 @@ function App() {
     setUploadStatus('');
   };
 
-  const handleUpload = () => {
+  const handleUpload = async () => {
     if (selectedFile) {
       setUploadStatus(t('file_selected', { fileName: selectedFile.name, fileSize: (selectedFile.size / 1024).toFixed(2) }));
+      const formData = new FormData();
+      formData.append('data', selectedFile);
+
+      try {
+        const res = await fetch('http://localhost:3000/api/upload', {
+          method: 'POST',
+          body: formData,
+        });
+        const data = await res.json();
+        setUploadStatus(data.message || 'Upload failed.');
+      } catch (error) {
+        console.error('Upload error:', error);
+        setUploadStatus('Error during upload.');
+      }
     } else {
       setUploadStatus(t('no_file_selected'));
     }
@@ -148,7 +162,7 @@ function App() {
     e.preventDefault();
     const username = e.target.username.value;
     const password = e.target.password.value;
-    const res = await fetch('/api/register', {
+    const res = await fetch('http://localhost:3000/api/register', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ username, password })
@@ -160,7 +174,7 @@ function App() {
     e.preventDefault();
     const username = e.target.username.value;
     const password = e.target.password.value;
-    const res = await fetch('/api/login', {
+    const res = await fetch('http://localhost:3000/api/login', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ username, password })
@@ -175,7 +189,7 @@ function App() {
   }
 
   async function getMe() {
-    const res = await fetch('/api/users/me', {
+    const res = await fetch('http://localhost:3000/api/users/me', {
       headers: { Authorization: `Bearer ${token}` }
     });
     setUser(await res.json());
@@ -183,7 +197,7 @@ function App() {
 
   async function quantum() {
     const prompt = window.prompt("Prompt para quantum (ex: superposição)?", "superposição");
-    const res = await fetch('/api/ia', {
+    const res = await fetch('http://localhost:3000/api/ia', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` },
       body: JSON.stringify({ module: 'quantum', prompt })
