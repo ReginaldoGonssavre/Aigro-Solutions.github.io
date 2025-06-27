@@ -83,7 +83,12 @@ const AboutSection = ({ t }) => (
   </section>
 );
 
-const AuthSection = ({ register, login, getMe, quantum, token, msg, user, t }) => (
+const AuthSection = ({ register, login, getMe, quantum, token, msg, user, t, 
+  predictAerospaceTrajectory, predictAutomotiveMaintenance, 
+  assessMaritimeSupplyChainRisk, assessSpaceCybersecurity, 
+  optimizeAutomotiveCharging, designAeroMaterial, 
+  analyzeMaritimeStructuralIntegrity, enhanceSpaceNavigationPrecision
+}) => (
   <section className="auth-section">
     <h1>AigroQuantumSaaS Frontend</h1>
     <form onSubmit={register}>
@@ -100,6 +105,18 @@ const AuthSection = ({ register, login, getMe, quantum, token, msg, user, t }) =
     </form>
     <button onClick={getMe} disabled={!token}>Meus Dados</button>
     <button onClick={quantum} disabled={!token}>Quantum Job</button>
+
+    {/* New Product Demo Buttons */}
+    <h2>Product Demos (Requires Login)</h2>
+    <button onClick={predictAerospaceTrajectory} disabled={!token}>Predict Aerospace Trajectory</button>
+    <button onClick={predictAutomotiveMaintenance} disabled={!token}>Predict Auto Maintenance</button>
+    <button onClick={assessMaritimeSupplyChainRisk} disabled={!token}>Assess Maritime Risk</button>
+    <button onClick={assessSpaceCybersecurity} disabled={!token}>Assess Space Security</button>
+    <button onClick={optimizeAutomotiveCharging} disabled={!token}>Optimize Auto Charging</button>
+    <button onClick={designAeroMaterial} disabled={!token}>Design Aero Material</button>
+    <button onClick={analyzeMaritimeStructuralIntegrity} disabled={!token}>Analyze Maritime Integrity</button>
+    <button onClick={enhanceSpaceNavigationPrecision} disabled={!token}>Enhance Space Nav Precision</button>
+
     <pre>{msg}</pre>
     {user && <pre>{JSON.stringify(user, null, 2)}</pre>}
   </section>
@@ -157,6 +174,39 @@ function App() {
       setUploadStatus(t('no_file_selected'));
     }
   };
+
+  // New functions for product-specific API calls
+  const callProductApi = async (endpoint, payload = {}) => {
+    if (!token) {
+      setMsg('Please login first to use product demos.');
+      return;
+    }
+    try {
+      setMsg(`Calling ${endpoint}...`);
+      const res = await fetch(`http://localhost:3000${endpoint}`, {
+        method: 'POST',
+        headers: { 
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${token}` 
+        },
+        body: JSON.stringify(payload)
+      });
+      const data = await res.json();
+      setMsg(JSON.stringify(data, null, 2));
+    } catch (error) {
+      console.error(`Error calling ${endpoint}:`, error);
+      setMsg(`Error calling ${endpoint}.`);
+    }
+  };
+
+  const predictAerospaceTrajectory = () => callProductApi('/api/predict/aerospace-trajectory', { data: 'sample_trajectory_data' });
+  const predictAutomotiveMaintenance = () => callProductApi('/api/predict/automotive-maintenance', { sensorData: 'sample_sensor_data' });
+  const assessMaritimeSupplyChainRisk = () => callProductApi('/api/risk/maritime-supply-chain', { manifest: 'sample_manifest', route: 'sample_route' });
+  const assessSpaceCybersecurity = () => callProductApi('/api/risk/space-cybersecurity', { systemId: 'sample_system_id' });
+  const optimizeAutomotiveCharging = () => callProductApi('/api/eco/automotive-charging-optimization', { vehicleId: 'sample_vehicle_id', location: 'sample_location', time: 'sample_time' });
+  const designAeroMaterial = () => callProductApi('/api/eco/aero-material-design', { materialSpecs: 'sample_material_specs' });
+  const analyzeMaritimeStructuralIntegrity = () => callProductApi('/api/sense/maritime-structural-integrity', { sensorReadings: 'sample_sensor_readings' });
+  const enhanceSpaceNavigationPrecision = () => callProductApi('/api/sense/space-navigation-precision', { navData: 'sample_nav_data' });
 
   async function register(e) {
     e.preventDefault();
@@ -233,6 +283,14 @@ function App() {
                   msg={msg}
                   user={user}
                   t={t}
+                  predictAerospaceTrajectory={predictAerospaceTrajectory}
+                  predictAutomotiveMaintenance={predictAutomotiveMaintenance}
+                  assessMaritimeSupplyChainRisk={assessMaritimeSupplyChainRisk}
+                  assessSpaceCybersecurity={assessSpaceCybersecurity}
+                  optimizeAutomotiveCharging={optimizeAutomotiveCharging}
+                  designAeroMaterial={designAeroMaterial}
+                  analyzeMaritimeStructuralIntegrity={analyzeMaritimeStructuralIntegrity}
+                  enhanceSpaceNavigationPrecision={enhanceSpaceNavigationPrecision}
                 />
               </>
             } />
