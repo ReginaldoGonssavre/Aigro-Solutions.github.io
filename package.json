@@ -9,6 +9,8 @@
   "author": "",
   "description": "A2A Types",
   "dependencies": {
+    "i18next": "^25.2.1",
+    "react-i18next": "^15.5.3",
     "typescript-json-schema": "^0.65.1"
   },
   "devDependencies": {
