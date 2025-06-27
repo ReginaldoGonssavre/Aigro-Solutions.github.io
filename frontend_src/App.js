@@ -1,11 +1,13 @@
 import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
+import { BrowserRouter as Router, Routes, Route, Link } from 'react-router-dom';
 import './i18n'; // Import the i18n configuration
+import EULAPage from './EULAPage';
 
 // Componentes para organizar o layout
 const Header = ({ changeLanguage, t }) => (
   <header>
-    <h1>{t('welcome_title')}</h1>
+    <h1><Link to="/">{t('welcome_title')}</Link></h1>
     <div className="language-selector">
       <button onClick={() => changeLanguage('pt')}>Português</button>
       <button onClick={() => changeLanguage('en')}>English</button>
@@ -78,6 +80,7 @@ const AuthSection = ({ register, login, getMe, quantum, token, msg, user, t }) =
 const Footer = ({ t }) => (
   <footer>
     <p>&copy; 2024 Aigro Quantum SaaS. {t('all_rights_reserved')}</p>
+    <p><Link to="/eula">Contrato de Licença de Usuário Final (EULA)</Link></p>
   </footer>
 );
 
@@ -161,32 +164,41 @@ function App() {
   }
 
   return (
-    <div>
-      <Header changeLanguage={changeLanguage} t={t} />
-      <main>
-        <HeroSection handleLearnMoreClick={handleLearnMoreClick} t={t} />
-        <FeaturesSection t={t} />
-        <ImageUploadSection 
-          handleFileChange={handleFileChange}
-          handleUpload={handleUpload}
-          selectedFile={selectedFile}
-          uploadStatus={uploadStatus}
-          t={t}
-        />
-        <AboutSection t={t} />
-        <AuthSection 
-          register={register}
-          login={login}
-          getMe={getMe}
-          quantum={quantum}
-          token={token}
-          msg={msg}
-          user={user}
-          t={t}
-        />
-      </main>
-      <Footer t={t} />
-    </div>
+    <Router>
+      <div>
+        <Header changeLanguage={changeLanguage} t={t} />
+        <main>
+          <Routes>
+            <Route path="/" element={
+              <>
+                <HeroSection handleLearnMoreClick={handleLearnMoreClick} t={t} />
+                <FeaturesSection t={t} />
+                <ImageUploadSection 
+                  handleFileChange={handleFileChange}
+                  handleUpload={handleUpload}
+                  selectedFile={selectedFile}
+                  uploadStatus={uploadStatus}
+                  t={t}
+                />
+                <AboutSection t={t} />
+                <AuthSection 
+                  register={register}
+                  login={login}
+                  getMe={getMe}
+                  quantum={quantum}
+                  token={token}
+                  msg={msg}
+                  user={user}
+                  t={t}
+                />
+              </>
+            } />
+            <Route path="/eula" element={<EULAPage />} />
+          </Routes>
+        </main>
+        <Footer t={t} />
+      </div>
+    </Router>
   );
 }
 
