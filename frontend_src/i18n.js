@@ -25,14 +25,17 @@ const resources = {
       "eula_link": "End User License Agreement (EULA)",
       "our_products_title": "Our Revolutionary Quantum Digital Products",
       "product_1_name": "QuantumPredict Pro",
-      "product_1_tagline": "Unlocking Predictive Power with Quantum Algorithms",
-      "product_1_description": "A SaaS platform for advanced predictive analytics and pattern detection in complex datasets, leveraging quantum algorithms for unparalleled accuracy and speed. Ideal for accelerated drug discovery, optimized financial portfolios, and quantum sensor data analysis.",
+      "product_1_tagline": "AI-Quantum Predictive Analytics for Precision Agriculture",
+      "product_1_description": "A SaaS platform leveraging Quantum Machine Learning (QML) for advanced predictive analytics in agriculture. Features include Quantum Satellite Image Analysis for early disease/stress detection, QML-optimized Yield Forecasting, and Quantum Optimization of Agricultural Resources (water, fertilizers, pesticides).",
       "product_2_name": "QuantumRisk Guardian",
-      "product_2_tagline": "Fortifying Your Future Against Quantum Threats",
-      "product_2_description": "A robust solution for identifying, mitigating, and managing risks in quantum-sensitive environments. Provides insights into post-quantum cybersecurity vulnerabilities, optimizes supply chains under quantum uncertainties, and models volatile market risks.",
+      "product_2_tagline": "Quantum & Post-Quantum Risk Management for Agri-Supply Chains",
+      "product_2_description": "A robust solution for protecting the agricultural value chain against emerging threats. Offers Post-Quantum Cryptography (PQC) for sensitive farm data, Quantum Market Risk Modeling for commodity price fluctuations, and Quantum-Optimized Supply Chain Resilience against disruptions.",
       "product_3_name": "QuantumEco AI",
-      "product_3_tagline": "Quantum Optimization for a Sustainable Planet",
-      "product_3_description": "Applies quantum algorithms to solve large-scale optimization problems in sustainability and resource management. Enables intelligent energy grid optimization, design of sustainable materials with quantum properties, and complex climate model simulations."
+      "product_3_tagline": "Quantum Optimization for Sustainable Agri-Environmental Solutions",
+      "product_3_description": "Applies quantum algorithms to solve large-scale sustainability challenges in agriculture. Includes Quantum Energy Optimization for Smart Farms, Quantum Design of Biofuels & Materials, and Quantum Climate Modeling for agricultural impact prediction.",
+      "product_4_name": "QuantumSense Connect",
+      "product_4_tagline": "Integrating & Analyzing Quantum Sensor Data for Agriculture",
+      "product_4_description": "A new platform for integrating and analyzing data from quantum sensors in agricultural applications. Provides APIs for ingesting data from advanced quantum sensors (e.g., for atomic-precision soil moisture, quantum pest detection), real-time visualization, and AI-Quantum powered alerts and recommendations."
     }
   },
   pt: {
@@ -56,14 +59,17 @@ const resources = {
       "eula_link": "Contrato de Licença de Usuário Final (EULA)",
       "our_products_title": "Nossos Produtos Digitais Quânticos Revolucionários",
       "product_1_name": "QuantumPredict Pro",
-      "product_1_tagline": "Desvendando o Poder Preditivo com Algoritmos Quânticos",
-      "product_1_description": "Uma plataforma SaaS para análise preditiva avançada e detecção de padrões em conjuntos de dados complexos, utilizando algoritmos quânticos para precisão e velocidade inigualáveis. Ideal para descoberta acelerada de medicamentos, portfólios financeiros otimizados e análise de dados de sensores quânticos.",
+      "product_1_tagline": "Análise Preditiva AI-Quântica para Agricultura de Precisão",
+      "product_1_description": "Uma plataforma SaaS que alavanca Machine Learning Quântico (QML) para análise preditiva avançada na agricultura. Inclui Análise Quântica de Imagens de Satélite para detecção precoce de doenças/estresse, Previsão de Rendimento Otimizada por QML e Otimização Quântica de Recursos Agrícolas (água, fertilizantes, pesticidas).",
       "product_2_name": "QuantumRisk Guardian",
-      "product_2_tagline": "Fortalecendo Seu Futuro Contra Ameaças Quânticas",
-      "product_2_description": "Uma solução robusta para identificar, mitigar e gerenciar riscos em ambientes sensíveis à quântica. Fornece insights sobre vulnerabilidades de cibersegurança pós-quântica, otimiza cadeias de suprimentos sob incertezas quânticas e modela riscos de mercado voláteis.",
+      "product_2_tagline": "Gestão de Riscos Quânticos e Pós-Quânticos para Cadeias de Suprimentos Agrícolas",
+      "product_2_description": "Uma solução robusta para proteger a cadeia de valor agrícola contra ameaças emergentes. Oferece Criptografia Pós-Quântica (PQC) para dados sensíveis de fazendas, Modelagem de Risco de Mercado Quântico para flutuações de preços de commodities e Otimização Quântica da Resiliência da Cadeia de Suprimentos contra interrupções.",
       "product_3_name": "QuantumEco AI",
-      "product_3_tagline": "Otimização Quântica para um Planeta Sustentável",
-      "product_3_description": "Aplica algoritmos quânticos para resolver problemas de otimização em larga escala relacionados à sustentabilidade e gestão de recursos. Permite a otimização inteligente de redes de energia, o design de materiais sustentáveis com propriedades quânticas e simulações complexas de modelos climáticos."
+      "product_3_tagline": "Otimização Quântica para Soluções Agri-Ambientais Sustentáveis",
+      "product_3_description": "Aplica algoritmos quânticos para resolver desafios de sustentabilidade em larga escala na agricultura. Inclui Otimização Quântica de Energia para Fazendas Inteligentes, Design Quântico de Biocombustíveis e Materiais, e Modelagem Climática Quântica para previsão de impacto agrícola.",
+      "product_4_name": "QuantumSense Connect",
+      "product_4_tagline": "Integrando e Analisando Dados de Sensores Quânticos para Agricultura",
+      "product_4_description": "Uma nova plataforma para integrar e analisar dados de sensores quânticos em aplicações agrícolas. Fornece APIs para ingestão de dados de sensores quânticos avançados (ex: para umidade do solo com precisão atômica, detecção de pragas por assinaturas quânticas), visualização em tempo real e alertas e recomendações alimentados por IA-Quântica."
     }
   }
 };

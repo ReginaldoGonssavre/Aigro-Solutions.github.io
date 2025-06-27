@@ -57,6 +57,11 @@ const ProductsSection = ({ t }) => (
         <h4>{t('product_3_tagline')}</h4>
         <p>{t('product_3_description')}</p>
       </div>
+      <div className="product-item">
+        <h3>{t('product_4_name')}</h3>
+        <h4>{t('product_4_tagline')}</h4>
+        <p>{t('product_4_description')}</p>
+      </div>
     </div>
   </section>
 );
@@ -196,7 +201,7 @@ function App() {
               <>
                 <HeroSection handleLearnMoreClick={handleLearnMoreClick} t={t} />
                 <FeaturesSection t={t} />
-                <ProductsSection t={t} /> {/* New Products Section */}
+                <ProductsSection t={t} />
                 <ImageUploadSection 
                   handleFileChange={handleFileChange}
                   handleUpload={handleUpload}
