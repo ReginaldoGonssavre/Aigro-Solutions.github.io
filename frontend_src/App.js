@@ -38,6 +38,29 @@ const FeaturesSection = ({ t }) => (
   </section>
 );
 
+const ProductsSection = ({ t }) => (
+  <section className="products">
+    <h2>{t('our_products_title')}</h2>
+    <div className="product-grid">
+      <div className="product-item">
+        <h3>{t('product_1_name')}</h3>
+        <h4>{t('product_1_tagline')}</h4>
+        <p>{t('product_1_description')}</p>
+      </div>
+      <div className="product-item">
+        <h3>{t('product_2_name')}</h3>
+        <h4>{t('product_2_tagline')}</h4>
+        <p>{t('product_2_description')}</p>
+      </div>
+      <div className="product-item">
+        <h3>{t('product_3_name')}</h3>
+        <h4>{t('product_3_tagline')}</h4>
+        <p>{t('product_3_description')}</p>
+      </div>
+    </div>
+  </section>
+);
+
 const ImageUploadSection = ({ handleFileChange, handleUpload, selectedFile, uploadStatus, t }) => (
   <section className="upload-section">
     <h2>{t('image_upload_title')}</h2>
@@ -80,7 +103,7 @@ const AuthSection = ({ register, login, getMe, quantum, token, msg, user, t }) =
 const Footer = ({ t }) => (
   <footer>
     <p>&copy; 2024 Aigro Quantum SaaS. {t('all_rights_reserved')}</p>
-    <p><Link to="/eula">Contrato de Licença de Usuário Final (EULA)</Link></p>
+    <p><Link to="/eula">{t('eula_link')}</Link></p>
   </footer>
 );
 
@@ -173,6 +196,7 @@ function App() {
               <>
                 <HeroSection handleLearnMoreClick={handleLearnMoreClick} t={t} />
                 <FeaturesSection t={t} />
+                <ProductsSection t={t} /> {/* New Products Section */}
                 <ImageUploadSection 
                   handleFileChange={handleFileChange}
                   handleUpload={handleUpload}

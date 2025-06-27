@@ -37,6 +37,11 @@ header h1 {
     font-size: 1.8rem;
 }
 
+header h1 a {
+    color: inherit;
+    text-decoration: none;
+}
+
 .language-selector button {
     background-color: var(--primary-color);
     color: white;
@@ -132,6 +137,42 @@ section h2 {
 }
 
 .feature-item p {
+    color: var(--text-dark);
+}
+
+/* Products Section */
+.products .product-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 2rem;
+}
+
+.product-item {
+    background-color: var(--background-light);
+    padding: 2rem;
+    border-radius: 8px;
+    box-shadow: 0 3px 10px rgba(0, 0, 0, 0.2);
+    transition: transform 0.3s ease;
+}
+
+.product-item:hover {
+    transform: translateY(-5px);
+}
+
+.product-item h3 {
+    color: var(--secondary-color);
+    font-size: 2rem;
+    margin-bottom: 0.5rem;
+}
+
+.product-item h4 {
+    color: var(--primary-color);
+    font-size: 1.2rem;
+    margin-top: 0;
+    margin-bottom: 1rem;
+}
+
+.product-item p {
     color: var(--text-dark);
 }
 
@@ -251,6 +292,15 @@ footer {
     margin-top: 2rem;
 }
 
+footer p a {
+    color: var(--primary-color);
+    text-decoration: none;
+}
+
+footer p a:hover {
+    text-decoration: underline;
+}
+
 /* Responsive Adjustments */
 @media (max-width: 768px) {
     header {
@@ -287,11 +337,13 @@ footer {
         font-size: 1rem;
     }
 
-    .features .feature-grid {
+    .features .feature-grid,
+    .products .product-grid {
         grid-template-columns: 1fr;
     }
 
-    .feature-item {
+    .feature-item,
+    .product-item {
         padding: 1.5rem;
     }
 
